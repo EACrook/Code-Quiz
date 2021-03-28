@@ -127,7 +127,7 @@ function endgame() {
     var enterInfoEl = document.createElement("form");
     enterInfoEl.setAttribute("method", "GET");
     enterInfoEl.setAttribute("action", "submit.php");
-    
+
     var identifyEl = document.createElement("input");
     identifyEl.setAttribute("type", "text")
     identifyEl.setAttribute("name", "enterName");
@@ -136,6 +136,12 @@ function endgame() {
     var submitButtonEl = document.createElement("button");
     submitButtonEl.setAttribute("type", "submit");
     submitButtonEl.setAttribute("value", "Submit");
+
+    // append each item 
+    saveScoreEl.appendChild(enterInfoEl);
+    saveScoreEl.appendChild(identifyEl);
+    saveScoreEl.appendChild(submitButtonEl);
+    
 }
 
 welcomePlayer();
