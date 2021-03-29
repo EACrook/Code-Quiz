@@ -4,6 +4,7 @@ var myScore = document.querySelector("#score");
 var finishedGame = document.querySelector("#endGame");
 var contOrEnd = document.querySelector(".again-btn");
 var saveScoreEl = document.querySelector(".savescore")
+var highScore = document.querySelector(".high-scores");
 
 // --Arrays with questions and answers
 var questions = [{
@@ -28,7 +29,7 @@ var questions = [{
         choices: ["", "", ""]
     },
     {
-        question: " Fith",
+        question: " Fifth",
         answer: "",
         choices: ["", "", ""]
     }
@@ -38,32 +39,38 @@ var questions = [{
 var score = 0;
 var qIndex = 0;
 
-// Welcome Page
-
-function welcomePlayer(e) { 
-    homePage.innerHTML = "Welcome! Please choice if you would like to continue to the quiz or view the high scores";
-
-    // Create buttons
+function takeToHome() {
     var startGameButtonEl = document.createElement("button");
     startGameButtonEl.textContent = "Start the Quiz";
     startGameButtonEl.className = "btn start-btn";
     homePage.appendChild(startGameButtonEl);
 
+    startGameButtonEl.addEventListener("click", function(s) {
+        console.log('clicked', s.target.innerHTML)
+        displayQuestion();
+    });
+}
+
+function takeToScores() {
     var viewScoresButtonEl = document.createElement("button");
     viewScoresButtonEl.textContent = "View High Scores";
     viewScoresButtonEl.className = "btn scores-btn";
     homePage.appendChild(viewScoresButtonEl);
 
-    // button click prints which has been clicked
-    startGameButtonEl.addEventListener("click", function(s) {
-        console.log('clicked', s.target.innerHTML)
-        displayQuestion();
-    });
-
     viewScoresButtonEl.addEventListener("click", function(v) {
         console.log('clicked', v.target.innerHTML)
         endgame();
     })
+}
+
+// Welcome Page
+
+function welcomePlayer(e) { 
+    homePage.innerHTML = "Welcome! Please choice if you would like to continue to the quiz or view the high scores!";
+
+   takeToHome()
+   takeToScores()
+   
 }
 
 function displayQuestion() {
@@ -112,12 +119,13 @@ function displayQuestion() {
             } else {
                 displayQuestion()
             }
-
-
-
         }
     }
+}
 
+function displayMessage(type, message) {
+    saveScoreEl.textContent = message;
+    saveScoreEl.setAttribute("class", type);
 }
 
 function endgame() {
@@ -127,6 +135,7 @@ function endgame() {
     var enterInfoEl = document.createElement("form");
     enterInfoEl.setAttribute("method", "GET");
     enterInfoEl.setAttribute("action", "submit.php");
+    enterInfoEl.textContent= "Enter your name and see where you are on the leader board."
 
     var identifyEl = document.createElement("input");
     identifyEl.setAttribute("type", "text")
@@ -136,12 +145,36 @@ function endgame() {
     var submitButtonEl = document.createElement("button");
     submitButtonEl.setAttribute("type", "submit");
     submitButtonEl.setAttribute("value", "Submit");
+    submitButtonEl.id = identifyEl.toString();
+    submitButtonEl.textContent = "Submit";
 
     // append each item 
     saveScoreEl.appendChild(enterInfoEl);
     saveScoreEl.appendChild(identifyEl);
     saveScoreEl.appendChild(submitButtonEl);
+
+    submitButtonEl.addEventListener("click", function() {
+        if (identifyEl === "") {
+           displayMessage("error", "Name field cannot be blank.")
+        }
+        else {
+            displayMessage("success", "Your score has been saved!")
+        }
+
+        localStorage.setItem("name", JSON.stringify(identifyEl));
+        localStorage.setItem("score", JSON.stringify(score));
+        identifyEl.innerHTML= "";
+    })
+    
+    
+    takeToHome();
+    takeToScores();
     
 }
 
+function highScoreLog(){
+    highScore.innerHTML= "View the high scores for this quiz!"
+
+    
+}
 welcomePlayer();
