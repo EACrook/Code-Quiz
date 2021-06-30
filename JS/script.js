@@ -8,30 +8,30 @@ var highScore = document.querySelector(".high-scores");
 
 // --Arrays with questions and answers
 var questions = [{
-        question: "What is the capital of WI?",
+        question: "What is the capital of Wisconsin?",
         answer: "Madison",
         choices: ["Milwaukee", "Green Bay", "Sheboygan", "Madison"]
 
     },
     {
-        question: "What is my cat's name?",
-        answer: "Fancy",
-        choices: ["Beans", "Toast", "Fancy", "Jeff"]
+        question: "What is the Wisconsin state motto?",
+        answer: "Forward",
+        choices: ["Forward", "Tomorrow", "Onward", "Toward"]
     },
     {
-        question: "Third",
-        answer: "",
-        choices: ["", "", ""]
+        question: "What is Wisconsin's largest city?",
+        answer: "Milwaukee",
+        choices: ["Madison", "Ashland", "Green Bay", "Milwaukee"]
     },
     {
-        question: " Fourth",
-        answer: "",
-        choices: ["", "", ""]
+        question: "What is Wisconsin's state bird?",
+        answer: "Robin",
+        choices: ["Turkey", "Robin", "Eagle", "Cardinal"]
     },
     {
-        question: " Fifth",
-        answer: "",
-        choices: ["", "", ""]
+        question: "What is the state flower?",
+        answer: "Wood Violet",
+        choices: ["Wild Blue Phlox", "Dwarf Lake Iris", "Wood Violet", "Chicory"]
     }
 ]
 
@@ -59,7 +59,7 @@ function takeToScores() {
 
     viewScoresButtonEl.addEventListener("click", function(v) {
         console.log('clicked', v.target.innerHTML)
-        endgame();
+        highScoreLog();
     })
 }
 
@@ -67,7 +67,7 @@ function takeToScores() {
 
 function welcomePlayer(e) { 
     homePage.innerHTML = "Welcome! Please choice if you would like to continue to the quiz or view the high scores!";
-
+    
    takeToHome()
    takeToScores()
    
@@ -76,8 +76,7 @@ function welcomePlayer(e) {
 function displayQuestion() {
     homePage.innerHTML = "";
     choiceContainer.innerHTML = '';
-    // console.log('MY SCORE!~!', score)
-    // myScore.innerHTML = "Score :" + score
+
 
     var poseQuestion = document.createElement("h1");
     poseQuestion.textContent = questions[qIndex].question;
@@ -175,6 +174,19 @@ function endgame() {
 function highScoreLog(){
     highScore.innerHTML= "View the high scores for this quiz!"
 
-    
+    var highscores = JSON.parse(window.localStorage.getItem("highscores")) || [];
+
+    highscores.sort(function(a, b) {
+        return b.score = a.score;
+    });
+
+    highscores.forEach(function(score) {
+        var listScoreEl = document.createElement("li");
+        listScoreEl.textContent = score.identifyEl + " has a score of " + score.score;
+
+        var displayScoreEl = document.getElementById("highscores");
+        displayScoreEl.appendChild(listScoreEl)
+    })    
 }
+
 welcomePlayer();
