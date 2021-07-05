@@ -1,4 +1,5 @@
 var homePage = document.querySelector("#welcome");
+var homeInfo = document.querySelector("#welcomeSection")
 var choiceContainer = document.querySelector(".choice-btn");
 var myScore = document.querySelector("#score");
 var finishedGame = document.querySelector("#endGame");
@@ -66,19 +67,21 @@ function takeToScores() {
 // Welcome Page
 
 function welcomePlayer(e) { 
-    homePage.innerHTML = "Welcome! Please choice if you would like to continue to the quiz or view the high scores!";
-    
-   takeToHome()
+    homePage.innerHTML = "Wisconsin Quiz!";
+    homeInfo.innerHTML = "Find out how well you know Wisconsin. Don't forget to save your high score to get on the leader board.";
+   
+    takeToHome()
    takeToScores()
    
 }
 
 function displayQuestion() {
     homePage.innerHTML = "";
+    homeInfo.innerHTML = "";
     choiceContainer.innerHTML = '';
 
 
-    var poseQuestion = document.createElement("h1");
+    var poseQuestion = document.createElement("h2");
     poseQuestion.textContent = questions[qIndex].question;
     choiceContainer.appendChild(poseQuestion);
 
@@ -160,8 +163,24 @@ function endgame() {
             displayMessage("success", "Your score has been saved!")
         }
 
-        localStorage.setItem("name", JSON.stringify(identifyEl));
-        localStorage.setItem("score", JSON.stringify(score));
+        var nameArray = []
+        var scoreArray = []
+
+
+        if(localStorage.getItem('name')){
+            nameArray = JSON.parse(localStorage.getItem('name'))
+        }
+
+        if(localStorage.getItem('score')){
+            scoreArray = JSON.parse(localStorage.getItem('score'))
+        }
+
+        
+       nameArray.push(identifyEl.value)
+       scoreArray.push(score)
+
+        localStorage.setItem("name", JSON.stringify(nameArray));
+        localStorage.setItem("score", JSON.stringify(scoreArray));
         identifyEl.innerHTML= "";
     })
     
@@ -172,20 +191,30 @@ function endgame() {
 }
 
 function highScoreLog(){
+    finishedGame.innerHTML = "";
+    // if(submitButtonEl) {
+    //     submitButtonEl.textContent = "";
+    // }
+    
+
     highScore.innerHTML= "View the high scores for this quiz!"
 
-    var highscores = JSON.parse(window.localStorage.getItem("highscores")) || [];
+    var nameArray = JSON.parse(localStorage.getItem('name'))
+    var scoreArray = JSON.parse(localStorage.getItem('score'))
 
-    highscores.sort(function(a, b) {
-        return b.score = a.score;
-    });
+    // var highscores = JSON.parse(window.localStorage.getItem("highscores")) || [];
 
-    highscores.forEach(function(score) {
+    // highscores.sort(function(a, b) {
+    //     return b.score = a.score;
+    // });
+
+    scoreArray.forEach(function(score, i) {
+        console.log('I in the for each!!!', i)
         var listScoreEl = document.createElement("li");
-        listScoreEl.textContent = score.identifyEl + " has a score of " + score.score;
+        listScoreEl.textContent = nameArray[i] + " has a score of " + score;
 
-        var displayScoreEl = document.getElementById("highscores");
-        displayScoreEl.appendChild(listScoreEl)
+        var displayScoreEl = document.getElementsByClassName("high-scores");
+        displayScoreEl[0].appendChild(listScoreEl)
     })    
 }
 
